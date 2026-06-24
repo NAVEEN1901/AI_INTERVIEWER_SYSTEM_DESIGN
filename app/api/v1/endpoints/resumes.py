@@ -29,6 +29,21 @@ router = APIRouter(prefix="/resumes", tags=["Resumes"])
 ALLOWED_EXTENSIONS = {".pdf", ".docx", ".txt"}
 
 
+@router.post("/parse-text")
+def parse_resume_text(payload: dict):
+    """
+    Parse resume from raw text (no database required).
+    Send: {"text": "resume content here", "filename": "optional.pdf"}
+    """
+    text = payload.get("text", "")
+    if not text or len(text.strip()) < 10:
+        raise HTTPException(status_code=400, detail="Please provide resume text (min 10 chars)")
+
+    from app.services.resume_parser import parse_resume_text as _parse_text
+    result = _parse_text(text)
+    return result
+
+
 @router.post("/upload", response_model=ResumeOut, status_code=status.HTTP_201_CREATED)
 async def upload_resume(
     file: UploadFile = File(...),

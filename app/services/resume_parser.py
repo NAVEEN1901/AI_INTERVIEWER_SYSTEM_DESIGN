@@ -143,6 +143,25 @@ def extract_education(text: str) -> list[dict]:
     return education
 
 
+def parse_resume_text(text: str) -> dict:
+    """
+    Parse resume from raw text string (no file needed).
+    Works without database connection.
+    """
+    doc = nlp(text[:100000])
+
+    result = {
+        "name": extract_name(doc),
+        "email": extract_email(text),
+        "phone": extract_phone(text),
+        "skills": extract_skills(text),
+        "experience_years": extract_experience_years(text),
+        "education": extract_education(text),
+        "word_count": len(text.split()),
+    }
+    return result
+
+
 def parse_resume(file_path: str) -> dict:
     """
     Parse a resume file and extract structured data.
