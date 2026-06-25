@@ -5,7 +5,7 @@ import uuid
 
 from qdrant_client import QdrantClient, models
 
-from app.core.config import settings
+from rag_pipeline.config import settings
 
 # Collection names
 RESUME_COLLECTION = "resumes"

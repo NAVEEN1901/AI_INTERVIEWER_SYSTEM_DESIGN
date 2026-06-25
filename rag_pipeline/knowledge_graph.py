@@ -9,7 +9,7 @@ Builds and queries a knowledge graph of:
 
 from typing import Optional
 
-from app.core.config import settings
+from rag_pipeline.config import settings
 
 
 class KnowledgeGraphService:

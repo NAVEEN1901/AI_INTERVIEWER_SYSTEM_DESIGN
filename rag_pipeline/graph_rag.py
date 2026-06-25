@@ -8,10 +8,10 @@ Combines graph traversal with LLM generation for:
 
 from typing import Optional
 
-from app.services.knowledge_graph import knowledge_graph
-from app.services.llm_service import llm_service
-from app.services.embedding_service import generate_embedding
-from app.services.vector_store import vector_store
+from rag_pipeline.knowledge_graph import knowledge_graph
+from rag_pipeline.llm_service import llm_service
+from rag_pipeline.embedding_service import generate_embedding
+from rag_pipeline.vector_store import vector_store
 
 
 GRAPH_RAG_SYSTEM_PROMPT = """You are an AI recruitment assistant with access to a knowledge graph of skills, 

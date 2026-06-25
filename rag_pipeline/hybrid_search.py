@@ -2,9 +2,9 @@
 
 from typing import Optional
 
-from app.services.jd_matcher import jd_matcher, preprocess_text, calculate_skill_match_score
-from app.services.embedding_service import generate_embedding, prepare_resume_text_for_embedding
-from app.services.vector_store import vector_store
+from rag_pipeline.jd_matcher import jd_matcher, preprocess_text, calculate_skill_match_score
+from rag_pipeline.embedding_service import generate_embedding, prepare_resume_text_for_embedding
+from rag_pipeline.vector_store import vector_store
 
 
 class HybridSearchEngine:
@@ -68,6 +68,10 @@ class HybridSearchEngine:
                 if cid not in candidate_scores:
                     candidate_scores[cid] = {"bm25_score": 0, "vector_score": 0, "skill_score": 0}
                 candidate_scores[cid]["vector_score"] = result["similarity_score"]
+                # Capture candidate skills from vector metadata so skill matching can use them
+                metadata = result.get("metadata") or {}
+                if metadata.get("skills"):
+                    candidate_scores[cid]["skills"] = metadata["skills"]
 
         # 3. Skill Matching (if skills provided)
         if required_skills:
@@ -124,7 +128,7 @@ class HybridSearchEngine:
 
     def index_job(self, job_id: int, title: str, description: str, required_skills: list[str], preferred_skills: list[str]) -> str:
         """Index a job in the vector store."""
-        from app.services.embedding_service import prepare_job_text_for_embedding
+        from rag_pipeline.embedding_service import prepare_job_text_for_embedding
         text = prepare_job_text_for_embedding(title, description, required_skills, preferred_skills)
         embedding = generate_embedding(text)
         point_id = vector_store.upsert_job(

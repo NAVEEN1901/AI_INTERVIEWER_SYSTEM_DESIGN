@@ -5,7 +5,7 @@ from typing import Optional
 
 from openai import OpenAI, AzureOpenAI
 
-from app.core.config import settings
+from rag_pipeline.config import settings
 
 
 class LLMService:
